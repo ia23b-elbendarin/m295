@@ -63,7 +63,7 @@ public class RezeptController {
 
     // 6. POST: Ein neues Rezept speichern
     @PostMapping
-    public ResponseEntity<Rezept> create(@Valid @RequestBody Rezept rezept) {
+    public ResponseEntity<Rezept> create(@RequestBody @Valid  Rezept rezept) {
         logger.info("Neues Rezept wird gespeichert: {}", rezept.getName());
         Rezept gespeichert = rezeptService.save(rezept);
         return new ResponseEntity<>(gespeichert, HttpStatus.CREATED);

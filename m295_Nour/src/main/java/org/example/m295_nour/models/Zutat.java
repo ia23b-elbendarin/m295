@@ -64,6 +64,7 @@ public class Zutat {
         this.einheit = einheit;
     }
 
+
     public Rezept getRezept() {
         return rezept;
     }
@@ -71,5 +72,6 @@ public class Zutat {
     public void setRezept(Rezept rezept) {
         this.rezept = rezept;
     }
+
 }
 

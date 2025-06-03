@@ -9,10 +9,8 @@ import java.util.List;
 @Entity
 public class Rezept {
 
-    // 🔹 Standard-Konstruktor (Pflicht für JPA)
     public Rezept() {}
 
-    // 🔹 Konstruktor für Tests (ohne Zutatenliste)
     public Rezept(String name, String beschreibung, int dauerInMinuten, boolean istVegetarisch, double bewertung, LocalDate erfasstAm) {
         this.name = name;
         this.beschreibung = beschreibung;
@@ -22,19 +20,7 @@ public class Rezept {
         this.erfasstAm = erfasstAm;
     }
 
-    // 🔹 Optional: zusätzlicher Konstruktor mit Zutatenliste
-    public Rezept(String name, String beschreibung, int dauerInMinuten, boolean istVegetarisch,
-                  double bewertung, LocalDate erfasstAm, List<Zutat> zutaten) {
-        this.name = name;
-        this.beschreibung = beschreibung;
-        this.dauerInMinuten = dauerInMinuten;
-        this.istVegetarisch = istVegetarisch;
-        this.bewertung = bewertung;
-        this.erfasstAm = erfasstAm;
-        this.zutaten = zutaten;
-    }
 
-    // 🔸 Felder mit JPA & Validierung
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -60,7 +46,7 @@ public class Rezept {
     @OneToMany(mappedBy = "rezept", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Zutat> zutaten;
 
-    // 🔸 Getter & Setter
+
     public Long getId() {
         return id;
     }
