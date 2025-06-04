@@ -137,7 +137,7 @@ Die API bietet Endpunkte für:
 - `POST /api/rezepte`
 - `DELETE /api/rezepte/vorDatum`
 - `GET /api/zutaten/byRezeptId`
-- u.v.m.
+
 
 ---
 
@@ -333,8 +333,4 @@ Klasse AE23b
 
 ## Zusammenfassung / Bemerkungen
 
-- Projektziel erreicht ✅  
-- API funktioniert inkl. Datenbank & Security  
-- Saubere Struktur mit Controller, Service, Repository, Entity  
-- Volle Testabdeckung bei Service- und Controller-Ebene  
-- Swagger vereinfacht das Testen enorm
+Bei mir haben die Umgebungsvariablen nicht richtig funktioniert. Ich konnte den Fehler zwar finden, aber es war mir lieber, es so zu machen, wie ich es jetzt habe.  
