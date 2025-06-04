@@ -120,7 +120,7 @@ class RezeptServiceTest {
         ConstraintViolation<Rezept> violation = mock(ConstraintViolation.class);
         Set<ConstraintViolation<Rezept>> violations = Set.of(violation);
 
-        when(validator.validate(any(Rezept.class))).thenReturn(violations); // sollte jetzt gehen
+        when(validator.validate(any(Rezept.class))).thenReturn(violations);
 
         assertThrows(IllegalArgumentException.class, () -> rezeptService.save(rezept));
 

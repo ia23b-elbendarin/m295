@@ -39,7 +39,7 @@ class RezeptControllerTest {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(rezeptController).build();
         objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule()); // ✅ wichtig für LocalDate
+        objectMapper.registerModule(new JavaTimeModule()); // wichtig für LocalDate
     }
 
     @Test
@@ -61,7 +61,7 @@ class RezeptControllerTest {
     void testSave() throws Exception {
         Rezept rezept = new Rezept(
                 "Burger",
-                "Leckerer Burger mit viel Käse", // ✅ >10 Zeichen
+                "Leckerer Burger mit viel Käse", // >10 Zeichen
                 15,
                 false,
                 4.2,
@@ -91,7 +91,7 @@ class RezeptControllerTest {
     void testUpdateWhenRezeptExists() throws Exception {
         Rezept updated = new Rezept(
                 "Tacos",
-                "Würzige mexikanische Spezialität", // ✅ gültige Beschreibung
+                "Würzige mexikanische Spezialität", // gültige Beschreibung
                 25,
                 false,
                 4.0,

@@ -16,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-//@ActiveProfiles("test")
 public class RezeptRepositoryTest {
 
     @Autowired
@@ -24,7 +23,7 @@ public class RezeptRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        rezeptRepository.deleteAll(); // sauberer Zustand
+        rezeptRepository.deleteAll();
         rezeptRepository.save(new Rezept("Salat", "Frischer Salat", 10, true, 4.5, LocalDate.of(2022, 1, 1)));
         rezeptRepository.save(new Rezept("Schnitzel", "Mit Pommes", 30, false, 4.0, LocalDate.of(2023, 1, 1)));
     }

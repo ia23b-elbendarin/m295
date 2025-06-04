@@ -41,7 +41,7 @@ class ZutatServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(validator.validate(any())).thenReturn(Set.of()); // Keine Validierungsfehler
+        when(validator.validate(any())).thenReturn(Set.of());
     }
 
     @Test
@@ -179,7 +179,7 @@ class ZutatServiceTest {
 
     @Test
     void testSaveZutatWithMissingRezeptId() {
-        Zutat zutat = new Zutat("Öl", 2.0, "ml", new Rezept()); // Rezept hat keine ID
+        Zutat zutat = new Zutat("Öl", 2.0, "ml", new Rezept());
 
         assertThrows(IllegalArgumentException.class, () -> zutatService.save(zutat));
     }

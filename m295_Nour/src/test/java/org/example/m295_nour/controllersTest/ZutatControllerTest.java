@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ZutatController.class)
-@Import(SecurityConfig.class) // ← Das ist entscheidend!
+@Import(SecurityConfig.class)
 class ZutatControllerTest {
 
     @Autowired
@@ -45,7 +45,7 @@ class ZutatControllerTest {
         mockMvc.perform(post("/api/zutaten")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(zutat)))
-                .andExpect(status().isForbidden()); // Jetzt funktioniert's!
+                .andExpect(status().isForbidden());
     }
 
     @Test
