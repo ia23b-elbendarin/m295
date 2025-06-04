@@ -1,7 +1,7 @@
 package org.example.m295_nour.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,7 +9,8 @@ import java.util.List;
 @Entity
 public class Rezept {
 
-    public Rezept() {}
+    public Rezept() {
+    }
 
     public Rezept(String name, String beschreibung, int dauerInMinuten, boolean istVegetarisch, double bewertung, LocalDate erfasstAm) {
         this.name = name;
@@ -20,32 +21,36 @@ public class Rezept {
         this.erfasstAm = erfasstAm;
     }
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(nullable = false)
+    @NotBlank(message = "Name darf nicht leer sein")
     private String name;
 
     @Column(columnDefinition = "TEXT")
+    @Size(min = 10, max = 500, message = "Beschreibung muss zwischen 10 und 500 Zeichen sein")
     private String beschreibung;
 
-    @NotNull
+    @Column(nullable = false)
+    @Min(value = 1, message = "Dauer muss mindestens 1 Minute betragen")
     private int dauerInMinuten;
 
-    @NotNull
+    @Column(nullable = false)
     private boolean istVegetarisch;
 
-    @NotNull
+    @Column(nullable = false)
+    @DecimalMin(value = "0.0", inclusive = true, message = "Bewertung darf nicht negativ sein")
+    @DecimalMax(value = "5.0", inclusive = true, message = "Bewertung darf maximal 5.0 sein")
     private double bewertung;
 
-    @NotNull
+    @Column(nullable = false)
+    @PastOrPresent(message = "Datum darf nicht in der Zukunft liegen")
     private LocalDate erfasstAm;
 
     @OneToMany(mappedBy = "rezept", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Zutat> zutaten;
-
 
     public Long getId() {
         return id;

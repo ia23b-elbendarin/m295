@@ -1,29 +1,37 @@
 package org.example.m295_nour.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class Zutat {
+
+    public Zutat() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(nullable = false)
+    @NotBlank(message = "Name darf nicht leer sein")
+    @Pattern(regexp = "^[A-Za-zÄÖÜäöüß\\s-]+$", message = "Name darf nur Buchstaben und Leerzeichen enthalten")
     private String name;
 
-    @NotNull
+    @Column(nullable = false)
+    @DecimalMin(value = "0.1", message = "Menge muss mindestens 0.1 betragen")
     private double menge;
 
-    @NotNull
+    @Column(nullable = false)
+    @NotBlank(message = "Einheit darf nicht leer sein")
     private String einheit;
 
     @ManyToOne
     @JoinColumn(name = "rezept_id", nullable = false)
     private Rezept rezept;
 
-    public Zutat() {}
 
     public Zutat(String name, double menge, String einheit, Rezept rezept) {
         this.name = name;

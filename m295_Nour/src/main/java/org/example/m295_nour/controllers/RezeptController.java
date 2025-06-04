@@ -2,107 +2,104 @@ package org.example.m295_nour.controllers;
 
 import jakarta.validation.Valid;
 import org.example.m295_nour.models.Rezept;
+import org.example.m295_nour.models.Zutat;
 import org.example.m295_nour.services.RezeptService;
+import org.example.m295_nour.services.ZutatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/rezepte")
 @Validated
-
 public class RezeptController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RezeptController.class);
-
     private final RezeptService rezeptService;
+    private final ZutatService zutatService;
 
     @Autowired
-    public RezeptController(RezeptService rezeptService) {
+    public RezeptController(RezeptService rezeptService, ZutatService zutatService) {
         this.rezeptService = rezeptService;
+        this.zutatService = zutatService;
     }
 
-    // 1. GET: Rezept mit ID lesen
-    @GetMapping("/{id}")
-    public ResponseEntity<Rezept> getById(@PathVariable Long id) {
-        Rezept rezept = rezeptService.findById(id);
-        return rezept != null ? ResponseEntity.ok(rezept) : ResponseEntity.notFound().build();
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
+    public ResponseEntity<Rezept> create(@Valid @RequestBody Rezept rezept) {
+        Rezept gespeichert = rezeptService.save(rezept);
+        return new ResponseEntity<>(gespeichert, HttpStatus.CREATED);
     }
 
-    // 2. GET: Prüfen, ob Rezept existiert
-    @GetMapping("/{id}/exists")
-    public ResponseEntity<Boolean> existsById(@PathVariable Long id) {
-        return ResponseEntity.ok(rezeptService.existsById(id));
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/alle")
+    public ResponseEntity<List<Rezept>> saveAll(@RequestBody List<Rezept> rezepte) {
+        return ResponseEntity.ok(rezeptService.saveAll(rezepte));
     }
 
-    // 3. GET: Alle Rezepte lesen
+
     @GetMapping
     public ResponseEntity<List<Rezept>> getAll() {
         return ResponseEntity.ok(rezeptService.findAll());
     }
 
-    // 4. GET: Rezepte nach Text (z. B. Name)
-    @GetMapping("/name/{name}")
-    public ResponseEntity<List<Rezept>> findByName(@PathVariable String name) {
-        return ResponseEntity.ok(rezeptService.findByNameContains(name));
+    @GetMapping("/{id}/exists")
+    public ResponseEntity<Boolean> exists(@PathVariable Long id) {
+        return ResponseEntity.ok(rezeptService.existsById(id));
     }
 
-    // 5. GET: Rezepte nach Boolean (Vegetarisch)
-    @GetMapping("/vegetarisch/{wert}")
-    public ResponseEntity<List<Rezept>> findByVegetarisch(@PathVariable boolean wert) {
+    @GetMapping("/vegetarisch")
+    public ResponseEntity<List<Rezept>> findByVegetarisch(@RequestParam boolean wert) {
         return ResponseEntity.ok(rezeptService.findByIstVegetarisch(wert));
     }
 
-    // 6. POST: Ein neues Rezept speichern
-    @PostMapping
-    public ResponseEntity<Rezept> create(@RequestBody @Valid  Rezept rezept) {
-        logger.info("Neues Rezept wird gespeichert: {}", rezept.getName());
-        Rezept gespeichert = rezeptService.save(rezept);
-        return new ResponseEntity<>(gespeichert, HttpStatus.CREATED);
+    @GetMapping("/{id}")
+    public ResponseEntity<Rezept> getById(@PathVariable Long id) {
+        Rezept rezept = rezeptService.findById(id);
+        return rezept != null
+                ? ResponseEntity.ok(rezept)
+                : ResponseEntity.notFound().build();
     }
 
-    // 7. POST: Mehrere neue Rezepte speichern
-    @PostMapping("/batch")
-    public ResponseEntity<List<Rezept>> createBatch(@RequestBody List<@Valid Rezept> rezepte) {
-        return new ResponseEntity<>(rezeptService.saveAll(rezepte), HttpStatus.CREATED);
-    }
-
-    // 8. PUT: Rezept aktualisieren
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Rezept> update(@PathVariable Long id, @Valid @RequestBody Rezept updated) {
+    public ResponseEntity<Rezept> updateRezept(@PathVariable Long id, @Valid @RequestBody Rezept rezept) {
         if (!rezeptService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        updated.setId(id);
-        return ResponseEntity.ok(rezeptService.save(updated));
+        rezept.setId(id);
+        Rezept updated = rezeptService.save(rezept);
+        return ResponseEntity.ok(updated);
     }
 
-    // 9. DELETE: Rezept mit ID löschen
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         rezeptService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    // 10. DELETE: Rezepte vor einem bestimmten Datum löschen
-    @DeleteMapping("/before/{datum}")
-    public ResponseEntity<Void> deleteBeforeDate(@PathVariable LocalDate datum) {
-        rezeptService.deleteBeforeDate(datum);
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/vorDatum")
+    public ResponseEntity<Void> deleteBefore(@RequestParam("datum") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datum) {
+        rezeptService.deleteBefore(datum);
         return ResponseEntity.noContent().build();
     }
 
-    // 11. DELETE: Alle löschen
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
     public ResponseEntity<Void> deleteAll() {
         rezeptService.deleteAll();
         return ResponseEntity.noContent().build();
     }
+
+
 }
