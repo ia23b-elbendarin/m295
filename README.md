@@ -68,7 +68,7 @@ Die Datenbank besteht aus zwei Entitäten:
 
 ### 2. Klassendiagramm
 
-*(Hier kannst du ggf. ein Klassendiagramm als Bild einfügen)*
+![image](https://github.com/user-attachments/assets/653d3e68-7aef-4786-9ba3-93f2a2036daa)
 
 ---
 
